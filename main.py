@@ -24,17 +24,7 @@ parser = argparse.ArgumentParser(description='Crystal Graph Convolutional Neural
 parser.add_argument('data_options', metavar='OPTIONS', nargs='+',
                     help='dataset options, started with the path to root dir, '
                          'then other options')
-'''
-是使用 argparse 模块为命令行参数解析器 (ArgumentParser) 添加一个新的位置参数
-data_options 这是你在命令行中传递的参数的名称。用户在运行脚本时，必须提供这个参数，它的值会被解析并存储在 data_options 中 
-如python script.py /path/to/root/dir option1 option2
-metavar 参数用来指定命令行帮助信息中该参数的显示名称
-nargs 指定该参数可以接受多个值。具体来说，'+' 表示该参数至少需要一个值，但可以接受多个值
 
-python script.py /path/to/root/dir option1 option2 option3
-/path/to/root/dir 将是 data_options 的第一个值（表示数据集的根目录路径）。
-option1, option2, option3 是传递给 data_options 的额外选项。
-'''
 parser.add_argument('--task', choices=['regression', 'classification'],
                     default='regression', help='complete a regression or '
                                                    'classification task (default: regression)')
@@ -43,16 +33,9 @@ parser.add_argument('--target', type=float, metavar='N')
 
 parser.add_argument('--disable-cuda', action='store_true',
                     help='Disable CUDA')
-#action='store_true'：这个参数的作用是，当用户在命令行中指定了 --disable-cuda 时，它会将该参数的值设置为 True。
-# 如果没有指定该参数，默认值是 False。这个常用于开启或关闭某些功能，比如禁用 CUDA（GPU加速）。
+
 parser.add_argument('-j', '--workers', default=0, type=int, metavar='N',
                     help='number of data loading workers (default: 0)')
-'''-j 和 --workers：这两个是同一个参数的不同表示方式，用户可以选择使用 -j 或 --workers 来传递参数。
-default=0：如果用户没有提供该参数，则默认为 0，意味着使用 0 个数据加载工作线程。
-type=int：表示该参数的值应当是一个整数。
-metavar='N'：这用于在帮助信息中显示该参数的占位符名称，在帮助信息中会看到 N 作为 --workers 参数的示例值。
-help='number of data loading workers (default: 0)'：描述这个参数的功能，它指定了数据加载使用的工作线程数，默认为 0（通常意味着不使用多线程）
-'''
 parser.add_argument('--epochs', default=50, type=int, metavar='N',
                     help='number of total epochs to run (default: 30)')
 parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
@@ -65,41 +48,15 @@ parser.add_argument('--lr', '--learning-rate', default=0.01, type=float,
                                        '0.01)')
 parser.add_argument('--lr-milestones', default=[100], nargs='+', type=int,
                     metavar='N', help='milestones for scheduler (default: '
-                                      '[100])') #默认的学习率调整将在第 100 次迭代或 epoch 时进行。
-parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
-                    help='momentum')  #这个参数通常用于优化器中，控制动量（Momentum）的大小。
-# 动量是优化算法（如 SGD）中的一个超参数，用于加速收敛和减少训练中的振荡。
-
+                                      '[100])') 
+parser.add_argument('--momentum', default=0.9, type=float, metavar='M',                  
 parser.add_argument('--weight-decay', '--wd', default=0, type=float,
                     metavar='W', help='weight decay (default: 0)')#定义了一个命令行参数 --weight-decay，
-# 它通常用于控制 权重衰减（Weight Decay）这一正则化技术
 parser.add_argument('--print-freq', '-p', default=10, type=int,
                     metavar='N', help='print frequency (default: 10)')
 parser.add_argument('--resume', default='', type=str, metavar='PATH',
                     help='path to latest checkpoint (default: none)')
 train_group = parser.add_mutually_exclusive_group()
-'''
-parser：这通常是一个 ArgumentParser 对象，来自 Python 标准库中的 argparse 模块。ArgumentParser 是用于处理命令行参数的工具。
-
-add_mutually_exclusive_group()：这是 ArgumentParser 对象的一个方法，用来创建一个 互斥的参数组。
-互斥的参数组意味着在该组中的参数不能同时出现在命令行中。
-
-例如，如果你有两个参数 --train 和 --test，并且它们属于同一个互斥参数组，那么在命令行中你不能同时指定这两个参数。你只能选择其中一个。
-train_group：这是互斥参数组的变量，表示你创建的互斥参数组对象。通过它，你可以将具体的命令行参数添加到该互斥组中
-假设你在写一个训练模型的脚本，并且你希望用户在命令行中只能选择训练或测试，而不能同时选择。这时你可以创建一个互斥参数组。
-
-python
-import argparse
-
-parser = argparse.ArgumentParser(description="Train or Test a model")
-train_group = parser.add_mutually_exclusive_group()
-
-# 向互斥组中添加参数
-train_group.add_argument('--train', action='store_true', help="Train the model")
-train_group.add_argument('--test', action='store_true', help="Test the model")
-
-args = parser.parse_args()
-'''
 train_group.add_argument('--train-ratio', default=None, type=float, metavar='N',
                     help='number of training data to be loaded (default none)')
 train_group.add_argument('--train-size', default=None, type=int, metavar='N',
@@ -138,10 +95,10 @@ else:
     best_mae_error = 0.
 
 
-print(args.b)  #答应bach_size
+print(args.b)  
 def main():
-    global args, best_mae_error #定义全部变量
-    print(args)  #所有的参数
+    global args, best_mae_error 
+    print(args)  
     print(args.data_options)
     print(args.target)
     # load data
@@ -188,7 +145,7 @@ def main():
                                 classification=True if args.task ==
                                                        'classification' else False)
     if args.cuda:
-        model.cuda() #cuda运行
+        model.cuda() 
 
     # define loss func and optimizer
     if args.task == 'classification':
@@ -205,7 +162,7 @@ def main():
     else:
         raise NameError('Only SGD or Adam is allowed as --optim')
 
-    # optionally resume from a checkpoint    这个参数主要是用来设置是否从断点处继续训练
+    # optionally resume from a checkpoint    
     if args.resume:
         if os.path.isfile(args.resume):
             print("=> loading checkpoint '{}'".format(args.resume))
